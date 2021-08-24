@@ -1,0 +1,40 @@
+class Solution {
+    
+    HashMap<String, Boolean> cache = new HashMap<>();
+    
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        List<String> res = new ArrayList<>();
+        if(words.length == 0)
+            return res;
+        
+        Set<String> set = new HashSet<>();
+        for(String word : words){
+            if(word.length() == 0)
+                continue;
+            set.add(word);
+            // min = Math.min(min, word.length());
+        }
+        
+        for(String word : words){
+            if(canForm(word, set))
+                res.add(word);
+        }
+        return res;
+    }
+    
+    public boolean canForm(String word, Set<String> set){
+        if(cache.containsKey(word))
+            return cache.get(word);
+        for(int i = 0; i < word.length(); i++){
+            String suffix = word.substring(i);
+            if(set.contains(word.substring(0, i)) && (set.contains(suffix) ||
+                                                     canForm(suffix, set))){
+                cache.put(word, true);
+                return true;
+            }
+                
+        }
+        cache.put(word, false);
+        return false;
+    }
+}
